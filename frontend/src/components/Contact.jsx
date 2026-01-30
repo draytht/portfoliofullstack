@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Github, Linkedin, Globe, Send, Loader2, CheckCircle } from 'lucide-react';
+import { Github, Linkedin, Instagram, Send, Loader2, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { contactAPI } from '../services/api';
 
@@ -17,9 +17,9 @@ const socialLinks = [
     icon: Linkedin,
   },
   {
-    name: 'Website',
-    href: 'https://thanhportfolio.online/',
-    icon: Globe,
+    name: 'Social',
+    href: 'https://www.instagram.com/justdatthang/?hl=en',
+    icon: Instagram,
   },
 ];
 
@@ -281,7 +281,7 @@ export default function Contact() {
           >
             thanhdat.workdirect@gmail.com
           </a>
-          <p className="font-mono text-text-muted mt-2">+1 612-298-6052</p>
+          <p className="font-mono text-text-muted mt-2"></p>
 
           {/* Social Links */}
           <div className="flex justify-center gap-4 mt-8">

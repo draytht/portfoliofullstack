@@ -16,7 +16,7 @@ export default function Hero() {
           transition={{ delay: 0.5, duration: 0.8 }}
           className="font-mono text-accent-cyan block mb-6"
         >
-          // Hello, World!
+          # Hello, Guys!
         </motion.span>
 
         <motion.h1

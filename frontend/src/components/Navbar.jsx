@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
+
 const navLinks = [
   { href: '#about', label: 'About' },
+  { href: '#blogs', label: 'Blogs' },
   { href: '#skills', label: 'Skills' },
   { href: '#projects', label: 'Projects' },
   { href: '#experience', label: 'Experience' },
@@ -37,7 +39,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
         {/* Logo */}
         <a href="#" className="font-mono text-xl font-bold gradient-text">
-          &lt;ThanhTran/&gt;
+          &lt;Drayy/&gt;
         </a>
 
         {/* Desktop Navigation */}

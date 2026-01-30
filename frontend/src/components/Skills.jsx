@@ -15,7 +15,7 @@ const skillCategories = [
   {
     title: 'Cloud & DevOps',
     gradient: 'gradient-3',
-    skills: ['AWS Lambda', 'AWS Amplify', 'API Gateway', 'Git', 'Jenkins', 'Docker'],
+    skills: ['AWS Lambda', 'AWS Amplify', 'API Gateway', 'Git', 'Docker'],
   },
   {
     title: 'AI & Data',

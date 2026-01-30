@@ -2,8 +2,10 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 const stats = [
-  { number: '5+', label: 'Projects Built' },
-  { number: '30+', label: 'Students Supported' },
+  { number: '8+', label: 'Projects Built' },
+  { number: '5+', label: 'Research Papers' },
+  { number: '1', label: 'Master Thesis' },
+  { number: '2024', label: 'BA Graduation' },
   { number: '2026', label: 'MS Graduation' },
 ];
 
@@ -70,11 +72,7 @@ export default function About() {
               </p>
               <p>
                 My experience spans from supporting 30+ students as a Teaching 
-                Assistant to engineering microcontroller-based systems for the{' '}
-                <span className="text-accent-cyan font-medium">
-                  Minnesota Space Grant Consortium
-                </span>
-                . I thrive in collaborative environments and love turning complex 
+                Assistant. I thrive in collaborative environments and love turning complex 
                 problems into elegant solutions.
               </p>
               <p>

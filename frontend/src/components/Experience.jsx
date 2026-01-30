@@ -16,8 +16,7 @@ const experiences = [
     title: 'Pass Leader | Teaching Assistant',
     company: 'Normandale Community College — Bloomington, MN',
     description: [
-      'Supported faculty and 30+ students weekly by resolving Tier 1 technical issues across classroom systems and online learning platforms',
-      'Utilized DevOps tools (Git, Jenkins) to streamline lab session setups and provide live technical assistance',
+      'Supported faculty and 30+ students weekly across classroom systems and online learning platforms',
       'Improved overall participation and efficiency during group activities',
     ],
   },
@@ -27,7 +26,7 @@ const experiences = [
     company: 'Normandale STEM Club — Minnesota Space Grant Consortium',
     description: [
       'Designed and implemented a microcontroller-based sensor system in C, optimizing memory and performance for embedded environments',
-      'Built Python data pipelines enabling real-time data transfer between sensors and host systems using REST APIs',
+      'Built Python data pipelines enabling real-time data transfer between sensors.',
       'Collaborated with a 6-member engineering team on data collection, validation, and system integration',
     ],
   },

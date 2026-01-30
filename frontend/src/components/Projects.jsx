@@ -10,40 +10,51 @@ const projects = [
     tags: ['Figma', 'UX/UI', 'Prototyping'],
     icon: '🧘',
     gradient: 'from-[#1a1a2e] via-[#16213e] to-[#0f3460]',
-    links: { demo: '#' },
+    links: { demo: 'https://www.figma.com/proto/TIcINfP03e3LMl6nBeeRge/DumpSpace?node-id=0-1&t=k8Q0gcNJyH3yehjM-1' },
   },
   {
     title: 'Cloud-Based To-Do List',
     description:
       'Full-stack web application with responsive frontend and AWS cloud backend. Implemented secure APIs using Lambda, API Gateway, and Amplify for scalable data operations.',
-    tags: ['JavaScript', 'Python', 'AWS'],
-    icon: '☁️',
+    tags: ['JavaScript', 'Python', 'AWS', 'APIs', 'DynamoDB', 'HTML/CSS'],
+    icon: '📋☁️',
     gradient: 'from-[#2d132c] via-[#801336] to-[#c72c41]',
-    links: { github: 'https://github.com/draytht' },
+    links: { github: 'https://github.com/draytht/todolist-Cloud-Based-Web-Application' },
   },
   {
     title: 'Music Creation with Deep Learning',
     description:
       'Developed and trained a Python-based neural network to generate musical sequences. Applied data preprocessing, model tuning, and statistical evaluation to enhance prediction accuracy.',
     tags: ['Python', 'Deep Learning', 'Neural Networks'],
-    icon: '🎵',
+    icon: '🎶',
     gradient: 'from-[#0a3d62] via-[#38ada9] to-[#78e08f]',
-    links: { github: 'https://github.com/draytht' },
+    links: { github: 'https://github.com/draytht/Music-Generation-with-Deep-Learning' },
   },
   {
     title: 'Web Application for Dances',
     description:
       'Built a responsive web application using JavaScript and backend APIs. Integrated third-party APIs for dynamic, real-time features with accessible, responsive UI components.',
-    tags: ['JavaScript', 'HTML/CSS', 'APIs'],
-    icon: '💃',
+    tags: ['PHP', 'HTML/CSS', 'APIs','JQuery tables', 'Open API'],
+    icon: '🕺🏻',
     gradient: 'from-[#2c2c54] via-[#474787] to-[#706fd3]',
-    links: { github: 'https://github.com/draytht' },
+    links: { github: 'https://github.com/draytht/tandana' },
   },
+
+  {
+    title: 'Car Hub Shop',
+    description:
+      "CarHub attempts to solve this problem with an easy-to-use application in which sellers can list their vehicles and buyers can browse those listings. The listings include relevant information about the vehicle and the seller's contact information, so they can then get in contact with each other directly, and the sale of the vehicle can be conducted on their own terms. Sellers can get their vehicles in front of potential buyers, and buyers can avoid the used car lot grind. Created using Java, JavaFX/FXML/CSS, and MySQL.",
+    tags: ['Grad;e', 'HTML/CSS', 'JavaFx', 'MySQL', 'Java'],
+    icon: '🚗',
+    gradient: 'from-[#2c2c54] via-[#474787] to-[#706fd3]',
+    links: { github: 'https://github.com/draytht/Car-Hub-Shop' },
+  },
+  
   {
     title: 'Quadcopter Sensor Suite',
     description:
       'Engineered a microcontroller-based sensor system for the Minnesota Space Grant Consortium. Built Python data pipelines for real-time sensor-to-cloud communication using REST APIs.',
-    tags: ['C', 'Python', 'AWS Lambda', 'IoT'],
+    tags: ['C', 'Python', 'Arduino', 'Auto CAD', '3d printing'],
     icon: '🚁',
     gradient: 'from-[#1e3799] via-[#0c2461] to-[#0a3d62]',
     links: {},

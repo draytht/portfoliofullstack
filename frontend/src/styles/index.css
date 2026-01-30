@@ -49,7 +49,7 @@ body {
   position: fixed;
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(0, 255, 170, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(221, 147, 29, 0.08) 50%, transparent 70%);
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
@@ -196,7 +196,8 @@ body {
 
 /* ==================== PROJECT CARDS ==================== */
 .project-card {
-  @apply rounded-xl overflow-hidden transition-all duration-400;
+  /* FIXED: Changed duration-400 to duration-300 and moved @apply to the top */
+  @apply rounded-xl overflow-hidden transition-all duration-300;
   background: #1a1a25;
 }
 
@@ -314,7 +315,3 @@ body {
     left: -2rem;
   }
 }
-
-
-
-@apply rounded-xl overflow-hidden transition-all duration-[400ms];

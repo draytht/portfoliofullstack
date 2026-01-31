@@ -20,32 +20,35 @@ export default function About() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image Placeholder */}
-          <motion.div
-            ref={ref}
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <div className="relative">
-              {/* Border Decoration */}
-              <div className="absolute inset-0 border-2 border-accent-cyan rounded-lg translate-x-5 translate-y-5 -z-10" />
-              
-              {/* Image Placeholder */}
-              <div className="w-full h-[450px] bg-gradient-to-br from-primary-card to-primary rounded-lg flex items-center justify-center relative overflow-hidden">
-                {/* Glow Effects */}
-                <div className="absolute inset-0">
-                  <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-accent-cyan/10 rounded-full blur-3xl" />
-                  <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-accent-purple/10 rounded-full blur-3xl" />
-                </div>
+            <motion.div
+              ref={ref}
+              initial={{ opacity: 0, x: -50 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8 }}
+              className="relative">
+              <div className="relative">
+                {/* Border Decoration - Scaled down slightly for mobile */}
+                <div className="absolute inset-0 border-2 border-accent-cyan rounded-lg translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 -z-10" />
                 
-                {/* Initials */}
-                <span className="text-8xl font-extrabold gradient-text opacity-30">
-                  TT
-                </span>
+                {/* Responsive GIF Container */}
+                {/* 'aspect-video' or 'aspect-square' keeps it proportional on all screens */}
+                <div className="w-full aspect-video md:aspect-[4/3] lg:aspect-square bg-gradient-to-br from-primary-card to-primary rounded-lg flex items-center justify-center relative overflow-hidden shadow-2xl">
+                  
+                  {/* Glow Effects */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 bg-accent-cyan/20 rounded-full blur-[100px]" />
+                    <div className="absolute bottom-1/4 right-1/4 w-1/2 h-1/2 bg-accent-purple/20 rounded-full blur-[100px]" />
+                  </div>
+                  
+                  {/* The GIF - 'object-cover' makes it fill the entire card area */}
+                  <img 
+                    src="/src/assets/1.gif" 
+                    alt="Zekrom Landing" 
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
           {/* Content */}
           <motion.div

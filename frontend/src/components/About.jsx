@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
+// ✅ Import the GIF properly - this works in both dev and production
+import charizardGif from '../assets/1.gif';
+
 const stats = [
   { number: '8+', label: 'Projects Built' },
   { number: '5+', label: 'Research Papers' },
@@ -40,9 +43,9 @@ export default function About() {
                     <div className="absolute bottom-1/4 right-1/4 w-1/2 h-1/2 bg-accent-purple/20 rounded-full blur-[100px]" />
                   </div>
                   
-                  {/* The GIF - 'object-cover' makes it fill the entire card area */}
+                  {/* ✅ The GIF - using imported variable */}
                   <img 
-                    src="/src/assets/1.gif" 
+                    src={charizardGif} 
                     alt="Charizard Landing" 
                     className="w-full h-full object-cover rounded-lg"
                   />

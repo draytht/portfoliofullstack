@@ -17,29 +17,55 @@ connectDB();
 // Security headers
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - Allow your frontend domain
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://justdatthang.com',
+  'https://www.justdatthang.com',
+  'https://draytht.github.io',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
 // Body parsers
-app.use(express.json({ limit: '10kb' })); // Limit body size for security
+app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
-// Request logging (development)
-if (process.env.NODE_ENV === 'development') {
-  app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} | ${req.method} ${req.path}`);
-    next();
-  });
-}
+// Request logging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} | ${req.method} ${req.path} | Origin: ${req.headers.origin || 'N/A'}`);
+  next();
+});
 
 // ============ ROUTES ============
 
-// Health check endpoint
+// Health check endpoint (Render uses this)
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Thanh Dat Tran Portfolio API',
+    version: '1.0.0',
+    status: 'running'
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -86,18 +112,25 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error('Server Error:', err);
   
+  // Handle CORS errors
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({
+      success: false,
+      message: 'CORS policy: Origin not allowed'
+    });
+  }
+  
   res.status(err.status || 500).json({
     success: false,
     message: process.env.NODE_ENV === 'development' 
       ? err.message 
-      : 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+      : 'Internal server error'
   });
 });
 
 // ============ START SERVER ============
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`
 ╔════════════════════════════════════════════════════════════╗
 ║                                                            ║
@@ -105,7 +138,7 @@ app.listen(PORT, () => {
 ║                                                            ║
 ║   Environment: ${(process.env.NODE_ENV || 'development').padEnd(40)}║
 ║   Port: ${PORT.toString().padEnd(47)}║
-║   API: http://localhost:${PORT}/api                         ║
+║   Status: Running                                          ║
 ║                                                            ║
 ╚════════════════════════════════════════════════════════════╝
   `);

@@ -43,7 +43,7 @@ export default function About() {
                   {/* The GIF - 'object-cover' makes it fill the entire card area */}
                   <img 
                     src="/src/assets/1.gif" 
-                    alt="Zekrom Landing" 
+                    alt="Charizard Landing" 
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>

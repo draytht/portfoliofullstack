@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Github, ExternalLink, Play } from 'lucide-react';
+import danceGif from '../assets/2.gif';
+import yogaGif from '../assets/3.gif';
+
 
 const projects = [
   {
@@ -8,7 +11,7 @@ const projects = [
     description:
       'A UX/UI case study featuring a responsive, mobile-first interface for digital wellness. Conducted user research and usability testing, iterating on layouts and interaction flows.',
     tags: ['Figma', 'UX/UI', 'Prototyping'],
-    icon: <img src="/src/assets/3.gif" alt="Meditation" className="w-20 h-20"/>,
+    icon: <img src={yogaGif} alt="Meditation" className="w-20 h-20"/>,
     gradient: 'from-[#1a1a2e] via-[#16213e] to-[#0f3460]',
     links: { demo: 'https://www.figma.com/proto/TIcINfP03e3LMl6nBeeRge/DumpSpace?node-id=0-1&t=k8Q0gcNJyH3yehjM-1' },
   },
@@ -35,7 +38,7 @@ const projects = [
     description:
       'Built a responsive web application using JavaScript and backend APIs. Integrated third-party APIs for dynamic, real-time features with accessible, responsive UI components.',
     tags: ['PHP', 'HTML/CSS', 'APIs','JQuery tables', 'Open API'],
-    icon: <img src="/src/assets/2.gif" alt="Chicken Dancing" className="w-20 h-20"/>,
+    icon: <img src={danceGif} alt="Chicken Dancing" className="w-20 h-20"/>,
     gradient: 'from-[#2c2c54] via-[#474787] to-[#706fd3]',
     links: { github: 'https://github.com/draytht/tandana' },
   },

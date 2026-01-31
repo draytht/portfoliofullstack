@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-// ✅ Import the GIF properly - this works in both dev and production
 import charizardGif from '../assets/1.gif';
 
 const stats = [

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Loader from './components/Loader';
 import CursorGlow from './components/CursorGlow';
@@ -10,9 +10,16 @@ import Projects from './components/Projects';
 import Experience from './components/Experience';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import { wakeUpServer } from './services/api';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Wake up the Render server on page load (free tier sleeps after 15 min inactivity)
+    // This reduces wait time when user submits the contact form
+    wakeUpServer();
+  }, []);
 
   return (
     <>

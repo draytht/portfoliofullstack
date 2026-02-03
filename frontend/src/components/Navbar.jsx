@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
-
 const navLinks = [
-  { href: '#about', label: 'About' },
-  { href: '#blogs', label: 'Blogs' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#projects', label: 'Projects' },
-  { href: '#experience', label: 'Experience' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/#about', label: 'About' },
+  { href: '/#skills', label: 'Skills' },
+  { href: '/#projects', label: 'Projects' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#contact', label: 'Contact' },
+  { href: '/blog', label: 'Blog', isRoute: true },
 ];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,8 +25,16 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (href) => {
     setIsMenuOpen(false);
+    
+    // Handle hash links on home page
+    if (href.startsWith('/#') && location.pathname === '/') {
+      const element = document.querySelector(href.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   };
 
   return (
@@ -38,23 +47,40 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
         {/* Logo */}
-        <a href="#" className="font-mono text-xl font-bold gradient-text">
-          &lt;Drayy/&gt;
-        </a>
+        <Link to="/" className="font-mono text-xl font-bold gradient-text">
+          &lt;ThanhTran/&gt;
+        </Link>
 
         {/* Desktop Navigation */}
         <ul className="hidden md:flex gap-10">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
-                href={link.href}
-                className="nav-link font-mono text-sm text-text-secondary hover:text-white transition-colors group"
-              >
-                <span className="text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity mr-1">
-                  //
-                </span>
-                {link.label}
-              </a>
+              {link.isRoute ? (
+                <Link
+                  to={link.href}
+                  className={`nav-link font-mono text-sm transition-colors group ${
+                    location.pathname === link.href 
+                      ? 'text-accent-cyan' 
+                      : 'text-text-secondary hover:text-white'
+                  }`}
+                >
+                  <span className="text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity mr-1">
+                    //
+                  </span>
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  href={link.href}
+                  onClick={() => handleLinkClick(link.href)}
+                  className="nav-link font-mono text-sm text-text-secondary hover:text-white transition-colors group"
+                >
+                  <span className="text-accent-cyan opacity-0 group-hover:opacity-100 transition-opacity mr-1">
+                    //
+                  </span>
+                  {link.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -75,14 +101,25 @@ export default function Navbar() {
           }`}
         >
           {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={handleLinkClick}
-              className="font-mono text-xl text-text-secondary hover:text-accent-cyan transition-colors"
-            >
-              {link.label}
-            </a>
+            link.isRoute ? (
+              <Link
+                key={link.href}
+                to={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="font-mono text-xl text-text-secondary hover:text-accent-cyan transition-colors"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => handleLinkClick(link.href)}
+                className="font-mono text-xl text-text-secondary hover:text-accent-cyan transition-colors"
+              >
+                {link.label}
+              </a>
+            )
           ))}
         </div>
       </div>

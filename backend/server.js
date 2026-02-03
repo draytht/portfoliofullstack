@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const connectDB = require('./config/db');
 const contactRoutes = require('./routes/contacts');
+const postRoutes = require('./routes/post');
 
 // Initialize Express app
 const app = express();
@@ -23,7 +24,6 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://justdatthang.com',
   'https://www.justdatthang.com',
-  'https://draytht.github.io',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -97,6 +97,9 @@ app.get('/api', (req, res) => {
 
 // Contact routes
 app.use('/api/contacts', contactRoutes);
+
+// Post/Blog routes
+app.use('/api/posts', postRoutes);
 
 // ============ ERROR HANDLING ============
 

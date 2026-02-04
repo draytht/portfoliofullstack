@@ -4,7 +4,7 @@ import axios from 'axios';
 const getBaseURL = () => {
   // Production: Use Render backend URL
   if (import.meta.env.PROD) {
-    return 'https://thanh-portfolio-api.onrender.com/api';
+    return 'https://nmek53mkye.execute-api.us-east-1.amazonaws.com/prod/api';
   }
   // Development: Use Vite proxy
   return '/api';

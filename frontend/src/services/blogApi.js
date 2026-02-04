@@ -3,7 +3,7 @@ import axios from 'axios';
 // Determine the API URL based on environment
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
-    return 'https://thanh-portfolio-api.onrender.com/api';
+    return 'https://nmek53mkye.execute-api.us-east-1.amazonaws.com/prod/api';
   }
   return '/api';
 };

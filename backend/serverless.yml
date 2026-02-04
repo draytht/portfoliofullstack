@@ -1,0 +1,75 @@
+# serverless.yml - AWS Lambda + API Gateway configuration
+service: thanh-portfolio-api
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'prod'}
+  region: ${opt:region, 'us-east-1'}
+  memorySize: 512
+  timeout: 30
+  
+  # Environment variables
+  environment:
+    NODE_ENV: production
+    MONGODB_URI: ${env:MONGODB_URI}
+    ADMIN_PASSWORD: ${env:ADMIN_PASSWORD}
+    FRONTEND_URL: https://justdatthang.com
+
+  # IAM permissions
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
+
+# Lambda function
+functions:
+  api:
+    handler: lambda.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors:
+            origin: 'https://justdatthang.com'
+            headers:
+              - Content-Type
+              - X-Admin-Password
+              - Authorization
+            allowCredentials: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: 'https://justdatthang.com'
+            headers:
+              - Content-Type
+              - X-Admin-Password
+              - Authorization
+            allowCredentials: true
+
+# Plugins
+plugins:
+  - serverless-offline  # For local testing
+
+# Package configuration
+package:
+  individually: true
+  patterns:
+    - '!node_modules/.cache/**'
+    - '!.git/**'
+    - '!.env*'
+    - '!README.md'
+
+# Custom configuration
+custom:
+  serverless-offline:
+    httpPort: 5000
+    noPrependStageInUrl: true

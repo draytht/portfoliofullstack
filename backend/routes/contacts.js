@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const Contact = require('../models/Contact');
 const rateLimit = require('express-rate-limit');
 const nodemailer = require('nodemailer');
+const Contact = require('../models/Contact');
 
-// Rate limiter specifically for contact form submissions
+// Rate limiter for contact form (5 submissions per 15 minutes per IP)
 const contactLimiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 5, // 5 requests per window
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: {
     success: false,
-    message: 'Too many contact requests. Please try again later.',
-    retryAfter: '15 minutes'
+    message: 'Too many submissions. Please try again in 15 minutes.'
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -39,60 +38,134 @@ const validateContact = [
   body('message')
     .trim()
     .notEmpty().withMessage('Message is required')
-    .isLength({ min: 10, max: 5000 }).withMessage('Message must be 10-5000 characters')
+    .isLength({ min: 10, max: 5000 }).withMessage('Message must be 10-5000 characters'),
 ];
 
-// Email transporter setup (optional)
+// ============ EMAIL CONFIGURATION ============
+
+// Create email transporter
 const createTransporter = () => {
-  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.EMAIL_PORT) || 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+  // Check if email is configured
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.log('⚠️ Email not configured - notifications disabled');
+    return null;
   }
-  return null;
+
+  return nodemailer.createTransport({
+    host: process.env.EMAIL_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.EMAIL_PORT) || 587,
+    secure: false, // true for 465, false for 587
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
 };
 
-// Send notification email
-const sendNotificationEmail = async (contact) => {
+// Send email notification
+const sendEmailNotification = async (contact) => {
   const transporter = createTransporter();
-  if (!transporter) return;
+  
+  if (!transporter) {
+    console.log('📧 Email skipped - not configured');
+    return false;
+  }
+
+  const emailTo = process.env.EMAIL_TO || process.env.EMAIL_USER;
+
+  const mailOptions = {
+    from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+    to: emailTo,
+    replyTo: contact.email,
+    subject: `🚀 New Contact: ${contact.subject || 'No Subject'} - from ${contact.name}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: 'Clash Grotesk', sans-serif; font-weight: 200; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #00ffaa, #e2a61a); padding: 30px; border-radius: 10px 10px 0 0; }
+          .header h1 { color: white; margin: 0; font-size: 24px; }
+          .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+          .field { margin-bottom: 20px; }
+          .label { font-weight: bold; color: #dfd117; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+          .value { margin-top: 5px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid #00ffaa; }
+          .message-box { background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #7c3aed; white-space: pre-wrap; }
+          .footer { text-align: center; margin-top: 20px; color: #666; font-size: 12px; }
+          .button { display: inline-block; background: #b1e8ee; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin-top: 15px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>📬 New Contact Form Submission</h1>
+          </div>
+          <div class="content">
+            <div class="field">
+              <div class="label">From</div>
+              <div class="value">${contact.name}</div>
+            </div>
+            <div class="field">
+              <div class="label">Email</div>
+              <div class="value"><a href="mailto:${contact.email}">${contact.email}</a></div>
+            </div>
+            <div class="field">
+              <div class="label">Subject</div>
+              <div class="value">${contact.subject || 'No subject provided'}</div>
+            </div>
+            <div class="field">
+              <div class="label">Message</div>
+              <div class="message-box">${contact.message}</div>
+            </div>
+            <div class="field">
+              <div class="label">Received At</div>
+              <div class="value">${new Date().toLocaleString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+              })}</div>
+            </div>
+            <center>
+              <a href="mailto:${contact.email}?subject=Re: ${contact.subject || 'Your message'}" class="button">
+                Reply to ${contact.name}
+              </a>
+            </center>
+          </div>
+          <div class="footer">
+            <p>This email was sent from your portfolio contact form at justdatthang.com</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+New Contact Form Submission
+===========================
+
+From: ${contact.name}
+Email: ${contact.email}
+Subject: ${contact.subject || 'No subject'}
+
+Message:
+${contact.message}
+
+---
+Received: ${new Date().toLocaleString()}
+    `,
+  };
 
   try {
-    await transporter.sendMail({
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_TO || 'thanhdat.workdirect@gmail.com',
-      subject: `New Contact: ${contact.subject || 'Portfolio Inquiry'}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #00ffaa; border-bottom: 2px solid #00ffaa; padding-bottom: 10px;">
-            New Portfolio Contact
-          </h2>
-          <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>From:</strong> ${contact.name}</p>
-            <p><strong>Email:</strong> ${contact.email}</p>
-            <p><strong>Subject:</strong> ${contact.subject || 'No Subject'}</p>
-            <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-          </div>
-          <div style="background: #1a1a25; color: #fff; padding: 20px; border-radius: 8px;">
-            <h3 style="color: #00ffaa; margin-top: 0;">Message:</h3>
-            <p style="white-space: pre-wrap;">${contact.message}</p>
-          </div>
-          <p style="color: #666; font-size: 12px; margin-top: 20px;">
-            Reply directly to this email to respond to ${contact.name}.
-          </p>
-        </div>
-      `,
-      replyTo: contact.email
-    });
-    console.log('✅ Notification email sent');
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✅ Email sent:', info.messageId);
+    return true;
   } catch (error) {
-    console.error('❌ Failed to send notification email:', error.message);
+    console.error('❌ Email error:', error.message);
+    return false;
   }
 };
 
@@ -100,7 +173,7 @@ const sendNotificationEmail = async (contact) => {
 
 /**
  * @route   POST /api/contacts
- * @desc    Submit a new contact form
+ * @desc    Submit contact form (public)
  * @access  Public
  */
 router.post('/', contactLimiter, validateContact, async (req, res) => {
@@ -120,26 +193,29 @@ router.post('/', contactLimiter, validateContact, async (req, res) => {
 
     const { name, email, subject, message } = req.body;
 
-    // Create new contact
+    // Create contact in database
     const contact = await Contact.create({
       name,
       email,
-      subject: subject || 'No Subject',
+      subject,
       message,
       ipAddress: req.ip,
-      userAgent: req.get('User-Agent')
+      userAgent: req.get('User-Agent'),
     });
 
-    // Send notification email (non-blocking)
-    sendNotificationEmail(contact).catch(console.error);
+    // Send email notification (non-blocking)
+    sendEmailNotification(contact).then(sent => {
+      if (sent) {
+        console.log(`📧 Email notification sent for contact ${contact._id}`);
+      }
+    });
 
     res.status(201).json({
       success: true,
-      message: 'Thank you for your message! I will get back to you soon.',
+      message: 'Thank you for your message! I\'ll get back to you soon.',
       data: {
         id: contact._id,
         name: contact.name,
-        email: contact.email,
         createdAt: contact.createdAt
       }
     });
@@ -148,27 +224,28 @@ router.post('/', contactLimiter, validateContact, async (req, res) => {
     console.error('Contact submission error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to submit contact form. Please try again later.'
+      message: 'Failed to submit contact form. Please try again.'
     });
   }
 });
 
 /**
  * @route   GET /api/contacts
- * @desc    Get all contacts (Admin only - add auth middleware in production)
- * @access  Private
+ * @desc    Get all contacts (admin)
+ * @access  Private (for admin dashboard)
  */
 router.get('/', async (req, res) => {
   try {
-    const { status, page = 1, limit = 10, sort = '-createdAt' } = req.query;
+    const { page = 1, limit = 20, status } = req.query;
     
     const query = {};
     if (status) query.status = status;
 
     const contacts = await Contact.find(query)
-      .sort(sort)
+      .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .select('-ipAddress -userAgent');
 
     const total = await Contact.countDocuments(query);
 
@@ -178,11 +255,9 @@ router.get('/', async (req, res) => {
       pagination: {
         current: parseInt(page),
         pages: Math.ceil(total / limit),
-        total,
-        limit: parseInt(limit)
+        total
       }
     });
-
   } catch (error) {
     console.error('Get contacts error:', error);
     res.status(500).json({
@@ -199,13 +274,17 @@ router.get('/', async (req, res) => {
  */
 router.get('/stats', async (req, res) => {
   try {
-    const stats = await Contact.getStats();
+    const total = await Contact.countDocuments();
+    const newCount = await Contact.countDocuments({ status: 'new' });
+    const today = await Contact.countDocuments({
+      createdAt: { $gte: new Date().setHours(0, 0, 0, 0) }
+    });
+
     res.json({
       success: true,
-      data: stats
+      data: { total, new: newCount, today }
     });
   } catch (error) {
-    console.error('Get stats error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch statistics'
@@ -215,7 +294,7 @@ router.get('/stats', async (req, res) => {
 
 /**
  * @route   GET /api/contacts/:id
- * @desc    Get single contact by ID
+ * @desc    Get single contact
  * @access  Private
  */
 router.get('/:id', async (req, res) => {
@@ -233,9 +312,7 @@ router.get('/:id', async (req, res) => {
       success: true,
       data: contact
     });
-
   } catch (error) {
-    console.error('Get contact error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to fetch contact'
@@ -252,17 +329,10 @@ router.patch('/:id', async (req, res) => {
   try {
     const { status } = req.body;
     
-    if (status && !['new', 'read', 'replied', 'archived'].includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Invalid status value'
-      });
-    }
-
     const contact = await Contact.findByIdAndUpdate(
       req.params.id,
       { status },
-      { new: true, runValidators: true }
+      { new: true }
     );
 
     if (!contact) {
@@ -274,12 +344,10 @@ router.patch('/:id', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Contact updated successfully',
+      message: 'Contact updated',
       data: contact
     });
-
   } catch (error) {
-    console.error('Update contact error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to update contact'
@@ -289,7 +357,7 @@ router.patch('/:id', async (req, res) => {
 
 /**
  * @route   DELETE /api/contacts/:id
- * @desc    Delete a contact
+ * @desc    Delete contact
  * @access  Private
  */
 router.delete('/:id', async (req, res) => {
@@ -305,11 +373,9 @@ router.delete('/:id', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Contact deleted successfully'
+      message: 'Contact deleted'
     });
-
   } catch (error) {
-    console.error('Delete contact error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to delete contact'

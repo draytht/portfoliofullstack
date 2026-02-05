@@ -33,7 +33,7 @@ export default function AdminDashboard() {
       await adminBlogAPI.authenticate(password);
       setIsAuthenticated(true);
       fetchData();
-      toast.success('Welcome back, Admin!');
+      toast.success('Welcome back, Drayy!');
     } catch (error) {
       toast.error(error.message || 'Invalid password');
     } finally {

@@ -13,7 +13,7 @@
       "timeout": 30,
       "environment": {
         "NODE_ENV": "production",
-        "MONGODB_URI": "mongodb+srv://admin:Jobless00!@dev-tran-app.wsykicn.mongodb.net/portfolio_contacts?retryWrites=true&w=majority",
+        "MONGODB_URI": "mongodb+srv://admin:Jobless00!@dev-tran-app.wsykicn.mongodb.net/portfolio?retryWrites=true&w=majority",
         "ADMIN_PASSWORD": "07072021",
         "FRONTEND_URL": "https://justdatthang.com"
       },
@@ -200,7 +200,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/thanh-portfolio-api/prod/1770184169239-2026-02-04T05:49:29.239Z/api.zip"
+                "S3Key": "serverless/thanh-portfolio-api/prod/1770317268627-2026-02-05T18:47:48.627Z/api.zip"
               },
               "Handler": "lambda.handler",
               "Runtime": "nodejs18.x",
@@ -210,7 +210,7 @@
               "Environment": {
                 "Variables": {
                   "NODE_ENV": "production",
-                  "MONGODB_URI": "mongodb+srv://admin:Jobless00!@dev-tran-app.wsykicn.mongodb.net/portfolio_contacts?retryWrites=true&w=majority",
+                  "MONGODB_URI": "mongodb+srv://admin:Jobless00!@dev-tran-app.wsykicn.mongodb.net/portfolio?retryWrites=true&w=majority",
                   "ADMIN_PASSWORD": "07072021",
                   "FRONTEND_URL": "https://justdatthang.com"
                 }
@@ -226,14 +226,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionxRI6o8rCQ6w9fUDgWMtLUozT2LuTJAQ16uZwYu0y16U": {
+          "ApiLambdaVersionsIkd0fYKue6GXWzY5VqVvLnnSfl5Sr8g8xaewC90sLY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "SSbHJ3GGeHJmG/vACuMAd84spAoQMsMtIIAo3q5NbVI="
+              "CodeSha256": "NKatkD1RS43JWgFom4jrOP38lqQRFRA8qPg2Hh9IvU4="
             }
           },
           "ApiGatewayRestApi": {
@@ -455,7 +455,7 @@
               "ApiLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1770184161906": {
+          "ApiGatewayDeployment1770317263689": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -520,7 +520,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionxRI6o8rCQ6w9fUDgWMtLUozT2LuTJAQ16uZwYu0y16U"
+              "Ref": "ApiLambdaVersionsIkd0fYKue6GXWzY5VqVvLnnSfl5Sr8g8xaewC90sLY"
             },
             "Export": {
               "Name": "sls-thanh-portfolio-api-prod-ApiLambdaFunctionQualifiedArn"
@@ -695,13 +695,13 @@
         ],
         "name": "thanh-portfolio-api-prod-api",
         "package": {
-          "artifact": "C:\\Users\\Thanh\\OneDrive\\Desktop\\MyProj\\portfolio-fullstack\\backend\\.serverless\\api.zip"
+          "artifact": "/Users/thadat/portfolio-fullstack/backend/.serverless/api.zip"
         },
         "memory": 512,
         "timeout": 30,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionxRI6o8rCQ6w9fUDgWMtLUozT2LuTJAQ16uZwYu0y16U"
+        "versionLogicalId": "ApiLambdaVersionsIkd0fYKue6GXWzY5VqVvLnnSfl5Sr8g8xaewC90sLY"
       }
     },
     "configValidationMode": "warn",
@@ -727,7 +727,7 @@
           "!README.md"
         ],
         "artifactsS3KeyDirname": "serverless/thanh-portfolio-api/prod/code-artifacts",
-        "artifactDirectoryName": "serverless/thanh-portfolio-api/prod/1770184169239-2026-02-04T05:49:29.239Z"
+        "artifactDirectoryName": "serverless/thanh-portfolio-api/prod/1770317268627-2026-02-05T18:47:48.627Z"
       },
       "custom": {
         "$ref": "$[\"service\"][\"custom\"]"
@@ -738,7 +738,7 @@
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/thanh-portfolio-api/prod/1770184169239-2026-02-04T05:49:29.239Z",
+    "artifactDirectoryName": "serverless/thanh-portfolio-api/prod/1770317268627-2026-02-05T18:47:48.627Z",
     "artifact": ""
   }
 }

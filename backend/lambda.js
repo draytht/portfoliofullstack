@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 
 // Import routes
 const contactRoutes = require('./routes/contacts');
-const postRoutes = require('./routes/posts');
+const postRoutes = require('./routes/post');
 
 // Initialize Express app
 const app = express();

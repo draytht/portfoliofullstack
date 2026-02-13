@@ -1,4 +1,4 @@
-# Thanh Dat Tran - Full-Stack Portfolio
+### Thanh Dat Tran - Full-Stack Portfolio
 
 A modern, responsive portfolio website built with the **MERN stack** (MongoDB, Express, React, Node.js). Features a contact form that stores submissions in a database and optionally sends email notifications.
 
